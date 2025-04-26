@@ -9,6 +9,6 @@ const poppins = Poppins({
 });
 export const Footer = () => {
   return (
-    <div className={cn("text-2xl tracking-tighter font-semibold",poppins.className)}>MetaShopper.</div>
+    <div className={cn("text-2xl tracking-tighter font-semibold border-t py-2",poppins.className)}>MetaShopper.</div>
   )
 }
