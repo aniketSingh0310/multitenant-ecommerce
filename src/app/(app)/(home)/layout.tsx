@@ -6,9 +6,9 @@ import { getPayload } from "payload";
 import { Footer } from "@/components/global/footer";
 import { Navbar } from "@/components/global/navbar";
 import SearchFilter from "@/components/global/search-filter";
-import Categories from "@/components/global/search-filter/categories";
-import { log } from "console";
+// import Categories from "@/components/global/search-filter/categories";
 import { Category } from "@/payload-types";
+import { CustomCategory } from "./types";
 
 interface Props {
   children: React.ReactNode;
@@ -30,7 +30,7 @@ const Layout = async ({ children }: Props) => {
     },
   });
 
-  const formattedData = data.docs.map((doc) => ({
+  const formattedData: CustomCategory[] = data.docs.map((doc) => ({
     ...doc,
     subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
       // because subcategories is an array of objects, we need to map through it and return the object
@@ -45,10 +45,8 @@ const Layout = async ({ children }: Props) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="border-b">
-      <SearchFilter data={data} />
-      <Categories data={formattedData}/>
-      </div>
+      <SearchFilter data={formattedData} />
+
       <div className="flex-1 bg-[#F4F4F4]">{children}</div>
       <Footer />
     </div>

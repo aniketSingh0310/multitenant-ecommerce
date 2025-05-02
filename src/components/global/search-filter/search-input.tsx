@@ -16,7 +16,7 @@ const SearchInput = ({ disabled }: Props) => {
           disabled={disabled}
         />
       </div>
-      
+
     </div>
   );
 };
