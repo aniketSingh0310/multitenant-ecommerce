@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { useDropdownPosition } from "./use-dropdown-position";
 import SubcategoryDropdown from "./subCategory-menu";
-import { CustomCategory } from "@/app/(app)/(home)/types";
 import Link from "next/link";
+import { CategoriesGetManyOutput } from "@/modules/categories/type";
 
 interface Props {
-    category: CustomCategory;
+    category: CategoriesGetManyOutput[1];
     isActive?: boolean;
     isNavigationHovered?: boolean;
 }
@@ -38,7 +38,7 @@ const CategoryDropdown = ({
 
     const toggleDropdown = () => {
 
-        if (category.subcategories?.docs?.length) {
+        if (category.subcategories?.length) {
             setIsOpen(!isOpen);
         }
     };

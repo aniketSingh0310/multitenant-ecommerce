@@ -1,54 +1,32 @@
-import React from "react";
-
-import configPromise from "@payload-config";
-import { getPayload } from "payload";
+import React, { Suspense } from "react";
 
 import { Footer } from "@/components/global/footer";
 import { Navbar } from "@/components/global/navbar";
-import SearchFilter from "@/components/global/search-filter";
-// import Categories from "@/components/global/search-filter/categories";
-import { Category } from "@/payload-types";
-import { CustomCategory } from "./types";
+import SearchFilter, { SearchFilterSkeleton } from "@/components/global/search-filter";
+import { getQueryClient, trpc } from "@/trpc/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 interface Props {
   children: React.ReactNode;
 }
 
 const Layout = async ({ children }: Props) => {
-  const payload = await getPayload({
-    config: configPromise,
-  });
 
-  const data = await payload.find({
-    collection: "categories",
-    depth: 1,
-    pagination: false,
-    where: {
-      parent: {
-        exists: false,
-      },
-    },
-    sort:"name",
-  });
-
-  const formattedData: CustomCategory[] = data.docs.map((doc) => ({
-    ...doc,
-    subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
-      // because subcategories is an array of objects, we need to map through it and return the object
-      // and spread the object to get the properties
-      ...(doc as Category),
-      subcategories: undefined,
-    })),
-  }));
-
-  console.log("formattedData", formattedData);
-
+  const queryClient = getQueryClient();
+  void queryClient.prefetchQuery(
+    trpc.categories.getMany.queryOptions(),
+  );
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <SearchFilter data={formattedData} />
-
-      <div className="flex-1 bg-[#F4F4F4]">{children}</div>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<SearchFilterSkeleton/>}>
+           <SearchFilter />
+        </Suspense>
+      </HydrationBoundary>
+      <div className="flex-1 bg-[#F4F4F4]">
+        {children}
+      </div>
       <Footer />
     </div>
   );
