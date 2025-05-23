@@ -11,7 +11,7 @@ export default  function Home() {
    
 <div>
   
-  {JSON.stringify(data,null, 2)}
+  {JSON.stringify(data?.user,null, 2)}
 </div>
   );
 }

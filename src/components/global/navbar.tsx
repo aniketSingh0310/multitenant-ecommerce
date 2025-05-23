@@ -75,14 +75,14 @@ export const Navbar = () => {
           variant="outline"
           className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
         >
-          <Link href={"/login"}>Log In</Link>
+          <Link prefetch href={"/sign-in"}>Log In</Link>
         </Button>
         <Button
           asChild
           variant="outline"
           className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
         >
-          <Link href={"/register"}>Start Selling</Link>
+          <Link prefetch  href={"/sign-up"}>Start Selling</Link>
         </Button>
       </div>
       {/* Mobile side bar */}
