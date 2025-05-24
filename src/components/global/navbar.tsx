@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { NavbarSidebar } from "./navbar-sidebar";
 import { MenuIcon } from "lucide-react";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -49,7 +51,8 @@ const navbarItems = [
 export const Navbar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
+  const trpc = useTRPC();
+  const session = useQuery(trpc.auth.session.queryOptions())
   return (
     <nav className="h-15 border-b flex justify-between bg-white">
       <Link href={"/"} className="items-center flex">
@@ -69,33 +72,46 @@ export const Navbar = () => {
           </NavbarItem>
         ))}
       </div>
-      <div className="hidden lg:flex">
-        <Button
-          asChild
-          variant="outline"
-          className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
-        >
-          <Link prefetch href={"/sign-in"}>Log In</Link>
-        </Button>
-        <Button
-          asChild
-          variant="outline"
-          className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
-        >
-          <Link prefetch  href={"/sign-up"}>Start Selling</Link>
-        </Button>
-      </div>
+      {session.data?.user ? (
+        <div className="hidden lg:flex">
+
+          <Button
+            asChild
+            variant="outline"
+            className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
+          >
+            <Link href={"/admin"}>Dashboard</Link>
+          </Button>
+        </div>
+      ) :
+        (<div className="hidden lg:flex">
+          <Button
+            asChild
+            variant="outline"
+            className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
+          >
+            <Link prefetch href={"/sign-in"}>Log In</Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
+          >
+            <Link prefetch href={"/sign-up"}>Start Selling</Link>
+          </Button>
+        </div>)}
+
       {/* Mobile side bar */}
       <div className="flex lg:hidden items-center justify-center">
-         <Button
+        <Button
           variant="ghost"
-            className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
-            onClick={() => setOpen(!open)}
-            >
-                <MenuIcon className="w-6 h-6 text-black" />
-                </Button> 
+          className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-white hover:bg-yellow-300 transition-colors text-base"
+          onClick={() => setOpen(!open)}
+        >
+          <MenuIcon className="w-6 h-6 text-black" />
+        </Button>
       </div>
-      <NavbarSidebar items={navbarItems} open={open} onOpenChange={setOpen}/>
+      <NavbarSidebar items={navbarItems} open={open} onOpenChange={setOpen} />
     </nav>
   );
 };
