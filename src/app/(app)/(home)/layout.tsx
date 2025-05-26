@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 
-import { Footer } from "@/components/global/footer";
-import { Navbar } from "@/components/global/navbar";
+import { Footer } from "@/modules/home/ui/components/footer";
+import { Navbar } from "@/modules/home/ui/components/navbar";
 import SearchFilter, { SearchFilterSkeleton } from "@/components/global/search-filter";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";

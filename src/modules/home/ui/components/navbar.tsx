@@ -5,11 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { NavbarSidebar } from "./navbar-sidebar";
+import { Button } from "../../../../components/ui/button";
+
 import { MenuIcon } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
+import { NavbarSidebar } from "./navbar-sidebar";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
