@@ -22,7 +22,7 @@ export const categoriesRouter = createTRPCRouter({
                // because subcategories is an array of objects, we need to map through it and return the object
                // and spread the object to get the properties
                ...(doc as Category),
-              subcategories: undefined,
+              
              })),
            }));
            return formattedData;

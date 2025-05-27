@@ -6,6 +6,7 @@ import SearchFilter, { SearchFilterSkeleton } from "@/components/global/search-f
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+
 interface Props {
   children: React.ReactNode;
 }

@@ -1,5 +1,6 @@
 import { Category } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { Elsie } from "next/font/google";
 import type { Where } from "payload";
 import { z } from "zod";
 
@@ -9,10 +10,28 @@ export const productsRouter = createTRPCRouter({
       z.object({
         // Define any input parameters if needed
         category: z.string().optional().nullable(),
+        minPrice: z.number().optional().nullable(),
+        maxPrice: z.number().optional().nullable(),
       })
     )
     .query(async ({ ctx, input }) => {
       const where: Where = {};
+
+      if (input.minPrice && input.minPrice) {
+        where.price = {
+          greater_than_equal: input.minPrice,
+          less_than_equal: input.maxPrice,
+        };
+      } else if (input.minPrice) {
+        where.price = {
+          greater_than_equal: input.minPrice,
+        };
+      } else if (input.maxPrice) {
+        where.price = {
+          less_than_equal: input.maxPrice,
+        };
+      }
+
       if (input.category) {
         const categoriesData = await ctx.db.find({
           collection: "categories",
@@ -31,18 +50,20 @@ export const productsRouter = createTRPCRouter({
             // because subcategories is an array of objects, we need to map through it and return the object
             // and spread the object to get the properties
             ...(doc as Category),
-             subcategories: undefined,
+            subcategories: undefined,
           })),
         }));
-        
+
         const subCategoriesSlugs = [];
         const parentCategory = formattedData[0];
         if (parentCategory) {
-          subCategoriesSlugs.push(...parentCategory.subcategories.map((sub) => sub.slug));
+          subCategoriesSlugs.push(
+            ...parentCategory.subcategories.map((sub) => sub.slug)
+          );
+          where["category.slug"] = {
+            in: [parentCategory.slug, ...subCategoriesSlugs],
+          };
         }
-        where["category.slug"] = {
-          in: [parentCategory.slug, ...subCategoriesSlugs],
-        };
       }
       const data = await ctx.db.find({
         collection: "products",

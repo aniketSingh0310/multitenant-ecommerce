@@ -6,12 +6,20 @@ import React from 'react'
 interface Props {
 category?: string;
 }
-export const ProductList = ({category}:Props) => {
+export const ProductList =({category}:Props) => {
     const trpc= useTRPC();
     const {data}= useSuspenseQuery(trpc.products.getMany.queryOptions({category}));
   return (
-    <div>
-        {JSON.stringify(data,null,2)}
+    <div className='grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-4'>
+        {data?.docs.map((product) => (
+            <div key={product.id}>
+                <div className="border p-4 rounded-md shadow-sm hover:shadow-md transition-shadow">
+                    <h2 className="text-lg font-semibold">{product.name}</h2>
+                    <p className="text-gray-600">{product.description}</p>
+                    <p className="text-green-600 font-bold">${product.price}</p>
+                </div>
+            </div>
+        ))}
     </div>
   )
 }
