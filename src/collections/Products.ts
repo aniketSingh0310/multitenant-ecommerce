@@ -34,6 +34,13 @@ export const Products: CollectionConfig = {
       required: true,
     },
     {
+      name: "tags",
+      type: "relationship",
+      relationTo: "tags",
+      hasMany: true,
+      
+    },
+    {
       name: "images",
       type: "upload",
       relationTo: "media",
