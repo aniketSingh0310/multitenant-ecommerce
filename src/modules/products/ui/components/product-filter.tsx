@@ -61,10 +61,11 @@ const ProductFilters = () => {
     <div className="border rounded-md bg-white">
       <div className="p-4 border-b flex items-center justify-between">
         <p className="font-medium">Filters</p>
-       
+       {hasAnyFilter && (
         <button className="underline text-sm cursor-pointer" onClick={() => onClearAll()}>
           Clear All
         </button>
+)}
       </div>
       <ProductFilter title="Price" className="border-b-0">
         <PriceFilter
@@ -86,3 +87,4 @@ const ProductFilters = () => {
 };
 
 export default ProductFilters;
+
