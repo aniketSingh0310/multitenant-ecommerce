@@ -5,10 +5,10 @@ import Link from "next/link";
 interface Props {
     category: CategoriesGetManyOutput[1];
     isOpen: boolean;
-    position?: { top: number; left: number };
+    
 }
 
-const SubcategoryDropdown = ({ category, isOpen, position }: Props) => {
+const SubcategoryDropdown = ({ category, isOpen }: Props) => {
     const backgroundColor = category.color || "bg-white";
     if (!isOpen || !category.subcategories || category.subcategories.length === 0) {
         return null;
@@ -16,12 +16,12 @@ const SubcategoryDropdown = ({ category, isOpen, position }: Props) => {
 
     return (
         <div
-            className="fixed z-100"
+            className="absolute z-100"
             style={{
-                top: position?.top,
-                left: position?.left,
+                top: "100%",
+                left: 0,
             }}>
-            <div className="h-3 w-6`0"></div>
+            <div className="h-[5px] w-6`0"></div>
             <div
                 style={{ backgroundColor }}
                 className="w-60 text-black rounded-md overflow-hidden border shadow-[4px_4px_4px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]">

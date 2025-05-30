@@ -1,29 +1,31 @@
 import React from "react";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import {SearchParams} from "nuqs/server"
+import { SearchParams } from "nuqs/server";
 import { loadProductFilters } from "@/modules/products/search-params";
 import ProductListViews from "@/modules/products/ui/views/product-list-views";
+import { DEFAULT_LIMIT } from "@/constants";
 interface Props {
-  params: Promise<{ 
+  params: Promise<{
     category: string;
   }>;
-  searchParams:Promise<SearchParams>
+  searchParams: Promise<SearchParams>;
 }
-const page = async ({ params,searchParams }: Props) => {
+const page = async ({ params, searchParams }: Props) => {
   const { category } = await params;
-  const filters = await loadProductFilters(searchParams)
+  const filters = await loadProductFilters(searchParams);
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions({ category, ...filters })
+  void queryClient.prefetchInfiniteQuery(
+    trpc.products.getMany.infiniteQueryOptions({
+      ...filters,
+      category,
+      limit: DEFAULT_LIMIT,
+    })
   );
-
-  console.log("This is RSC filter", JSON.stringify(filters));
-  
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-     <ProductListViews category={category}/>
+      <ProductListViews category={category} />
     </HydrationBoundary>
   );
 };
