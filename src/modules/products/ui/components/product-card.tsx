@@ -1,14 +1,16 @@
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 interface ProductCardProps {
   id: string;
   name: string;
   imageUrl?: string | null;
   price: number | null |undefined;
-  authorUsername: string;
-  authorImageUrl?: string | null;
+  tenantSlug: string;
+  tenantImage?: string | null;
   reviewsCount: number;
   reviewsRating: number;
 }
@@ -18,11 +20,19 @@ export const ProductCard = ({
   name,
   imageUrl,
   price,
-  authorUsername,
-  authorImageUrl,
+  tenantSlug,
+  tenantImage,
   reviewsCount,
   reviewsRating,
 }: ProductCardProps) => {
+
+  const router = useRouter();
+  const handleTenantClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    router.push(`/tenants/${tenantSlug}`);
+  };
+
   return (
     <Link href={`/products/${id}`} className="no-underline">
       <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border rounded-md bg-white overflow-hidden h-full flex flex-col">
@@ -37,17 +47,17 @@ export const ProductCard = ({
         <div className="p-4 border-y flex flex-col gap-3 flex-1">
           <h2 className="text-lg font-medium line-clamp-4">{name}</h2>
           {/* TODO:redirect to author page */}
-          <div className="flex items-center gap-2" onClick={() => {}}>
-            {authorImageUrl && (
+          <div className="flex items-center gap-2" onClick={handleTenantClick}>
+            {tenantImage && (
               <Image
-                src={authorImageUrl}
-                alt={authorUsername}
+                src={tenantImage}
+                alt={tenantSlug}
                 width={16}
                 height={16}
                 className="rounded-full border shrink-0 size-[16px]"
               />
             )}
-            <p className="text-sm font-medium underline">{authorUsername}</p>
+            <p className="text-sm font-medium underline">{tenantSlug}</p>
           </div>
           {reviewsCount > 0 && (
             <div className="flex items-center gap-1">
