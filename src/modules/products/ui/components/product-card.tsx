@@ -6,7 +6,7 @@ interface ProductCardProps {
   id: string;
   name: string;
   imageUrl?: string | null;
-  price: number;
+  price: number | null |undefined;
   authorUsername: string;
   authorImageUrl?: string | null;
   reviewsCount: number;

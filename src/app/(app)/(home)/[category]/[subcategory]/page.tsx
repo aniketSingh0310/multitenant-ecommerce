@@ -24,7 +24,7 @@ const page = async ({ params, searchParams }: Props) => {
     })
   );
 
-  console.log("This is RSC filter", JSON.stringify(filters));
+   
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

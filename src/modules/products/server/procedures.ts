@@ -9,8 +9,8 @@ export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
       z.object({
-        cusrsor:z.number().default(1),
-        limt: z.number().default(DEFAULT_LIMIT),
+        cursor:z.number().default(1),
+        limit: z.number().default(DEFAULT_LIMIT),
         category: z.string().optional().nullable(),
         minPrice: z.string().optional().nullable(),
         maxPrice: z.string().optional().nullable(),
@@ -91,8 +91,8 @@ export const productsRouter = createTRPCRouter({
         depth: 1, 
         where,
         sort,
-        page:input.cusrsor,
-        limit: input.limt, 
+        page:input.cursor,
+        limit: input.limit, 
       });
 
       return {

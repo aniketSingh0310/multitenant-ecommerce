@@ -58,8 +58,8 @@ const {
               name={product.name}
               imageUrl={product.image?.url || "/placeholder.png"}
               price={product.price}
-              authorUsername={product.author?.username || "Aniket"}
-              authorImageUrl={product.author?.image?.url || ""}
+              authorUsername={ "Aniket"}
+              authorImageUrl={"/placeholder.png"}
               reviewsCount={3}
               reviewsRating={4.5}
             />
