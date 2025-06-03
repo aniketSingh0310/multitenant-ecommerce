@@ -1,3 +1,4 @@
+import { currencyFormatter, generateTenantUrl } from "@/lib/utils";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,7 +35,7 @@ export const ProductCard = ({
   };
 
   return (
-    <Link href={`/products/${id}`} className="no-underline">
+    <Link href={`${generateTenantUrl(tenantSlug)}/products/${id}`} className="no-underline">
       <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border rounded-md bg-white overflow-hidden h-full flex flex-col">
         <div className="relative aspect-square">
           <Image
@@ -71,11 +72,7 @@ export const ProductCard = ({
         <div className="p-4">
           <div className="relative px-2 py-1 border bg-yellow-300 w-fit">
             <p>
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "INR",
-                maximumFractionDigits: 0,
-              }).format(Number(price))}
+             {currencyFormatter(price??0)}
             </p>
           </div>
         </div>
