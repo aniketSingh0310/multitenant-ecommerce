@@ -5,15 +5,15 @@ import React from "react";
 
 interface CheckoutSideBarProps {
   total: number;
-  onCheckout: () => void;
+  onPurchase: () => void;
   isCanceled: boolean;
-  isPending: boolean;
+  disabled: boolean;
 }
 export const CheckoutSideBar = ({
   total,
-  onCheckout,
+  onPurchase,
   isCanceled,
-  isPending,
+  disabled,
 }: CheckoutSideBarProps) => {
   return (
     <div className="border rounded-md overflow-hidden bg-white flex flex-col">
@@ -24,8 +24,8 @@ export const CheckoutSideBar = ({
       <div className="flex items-center justify-center p-4">
         <Button
           variant={"elevated"}
-          onClick={onCheckout}
-          disabled={isPending}
+          onClick={onPurchase}
+          disabled={disabled}
           size={"lg"}
           className="w-full text-base text-white bg-primary hover:bg-yellow-300 hover:text-primary"
         >
