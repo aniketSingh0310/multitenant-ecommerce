@@ -11,12 +11,14 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment } from "react";
 
-const CartButton = dynamic(
-  () => import("../components/cart-button"),
-  { ssr: false ,
-  loading: () => <Button disabled className="flex-1 bg-yellow-300 text-black">Loading...</Button> 
-  }
-);
+const CartButton = dynamic(() => import("../components/cart-button"), {
+  ssr: false,
+  loading: () => (
+    <Button disabled className="flex-1 bg-yellow-300 text-black">
+      Loading...
+    </Button>
+  ),
+});
 interface Props {
   productId: string;
   tenantSlug: string;
@@ -100,7 +102,12 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
             <div className="border-t lg:border-t-0 lg:border-l h-full">
               <div className="flex flex-col gap-4 p-6 border-b">
                 <div className="flex flex-row items-center gap-2">
-                  <CartButton productId={productId } tenantSlug={tenantSlug}/>
+                  <CartButton
+                    productId={productId}
+                    tenantSlug={tenantSlug}
+                    isPurchased={data.isPurchased}
+                  />
+
                   <Button
                     variant={"elevated"}
                     className="size-12"
@@ -117,25 +124,25 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
                 </p>
               </div>
               <div className="p-6">
-               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-medium">Ratings</h3>
-                <div className="flex items-center gap-x-1 font-medium">
-                  <StarIcon className="size-4 fill-amber-300"/>
-                  <p>({5})</p>
-                  <p className="text-base">{5} ratings</p>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-medium">Ratings</h3>
+                  <div className="flex items-center gap-x-1 font-medium">
+                    <StarIcon className="size-4 fill-amber-300" />
+                    <p>({5})</p>
+                    <p className="text-base">{5} ratings</p>
+                  </div>
                 </div>
-               </div>
-                 <div className="grid grid-cols-[auto_1fr_auto] gap-4 mt-4">
-                  {[5,4,3,2,1].map((rating) => (
+                <div className="grid grid-cols-[auto_1fr_auto] gap-4 mt-4">
+                  {[5, 4, 3, 2, 1].map((rating) => (
                     <Fragment key={rating}>
-                      <div>{rating} {rating===1?"star":"stars"}</div>
-                      <Progress value={25} className="h-[1lh]"/>
-                      <div className="font-medium">
-                        {0}%
+                      <div>
+                        {rating} {rating === 1 ? "star" : "stars"}
                       </div>
+                      <Progress value={25} className="h-[1lh]" />
+                      <div className="font-medium">{0}%</div>
                     </Fragment>
                   ))}
-                 </div>
+                </div>
               </div>
             </div>
           </div>
