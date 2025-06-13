@@ -6,10 +6,11 @@ import { Progress } from "@/components/ui/progress";
 import { currencyFormatter, generateTenantUrl } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { LinkIcon, StarIcon } from "lucide-react";
+import { CheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { toast } from "sonner";
 
 const CartButton = dynamic(() => import("../components/cart-button"), {
   ssr: false,
@@ -24,6 +25,8 @@ interface Props {
   tenantSlug: string;
 }
 const ProductViews = ({ productId, tenantSlug }: Props) => {
+
+  const [isCopied, setIsCopied]= useState(false);
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
     trpc.products.getOne.queryOptions({ id: productId })
@@ -74,16 +77,17 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
                 </Link>
               </div>
               <div className="hidden lg:flex items-center justify-center px-6 py-4">
-                <div className="flex items-center gap-1">
-                  <StarRating rating={4} />
+                <div className="flex items-center gap-2">
+                  <StarRating rating={data.reviewRating} />
+                  <p className="text-base font-medium">{data.reviewCount} ratings</p>
                 </div>
               </div>
             </div>
 
             <div className="block lg:hidden px-6 py-4 items-center justify-center border-b">
-              <div className="flex items-center gap-1">
-                <StarRating rating={4} iconClassName="size-4" />
-                <p className="text-base font-medium">{5} ratings</p>
+              <div className="flex items-center gap-2">
+                <StarRating rating={data.reviewRating} iconClassName="size-4" />
+                <p className="text-base font-medium">{data.reviewCount} ratings</p>
               </div>
             </div>
 
@@ -111,10 +115,18 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
                   <Button
                     variant={"elevated"}
                     className="size-12"
-                    onClick={() => {}}
-                    disabled={false}
+                    onClick={() => {
+                      setIsCopied(true)
+                      navigator.clipboard.writeText(window.location.href)
+                      toast.success("URL copied!")
+                      setTimeout(()=>{
+                        setIsCopied(false)
+                      },2000)
+                    }}
+                    disabled={isCopied}
                   >
-                    <LinkIcon />
+                    {isCopied ? <CheckIcon/> :<LinkIcon />}
+                    
                   </Button>
                 </div>
                 <p className="text-center font-medium">
@@ -128,8 +140,8 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
                   <h3 className="text-xl font-medium">Ratings</h3>
                   <div className="flex items-center gap-x-1 font-medium">
                     <StarIcon className="size-4 fill-amber-300" />
-                    <p>({5})</p>
-                    <p className="text-base">{5} ratings</p>
+                    <p>({data.reviewRating})</p>
+                    <p className="text-base">{data.reviewCount} ratings</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-[auto_1fr_auto] gap-4 mt-4">
@@ -138,8 +150,8 @@ const ProductViews = ({ productId, tenantSlug }: Props) => {
                       <div>
                         {rating} {rating === 1 ? "star" : "stars"}
                       </div>
-                      <Progress value={25} className="h-[1lh]" />
-                      <div className="font-medium">{0}%</div>
+                      <Progress value={data.ratingDistribution[rating]} className="h-[1lh]" />
+                      <div className="font-medium">{data.ratingDistribution[rating]}%</div>
                     </Fragment>
                   ))}
                 </div>

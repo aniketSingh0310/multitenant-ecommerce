@@ -64,8 +64,8 @@ const {
               price={product.price}
               tenantSlug={product.tenant?.slug}
               tenantImage={product.tenant?.image?.url}
-              reviewsCount={3}
-              reviewsRating={4.5}
+              reviewsCount={product.reviewCount}
+              reviewsRating={product.reviewRating}
             />
           ))}
       </div>

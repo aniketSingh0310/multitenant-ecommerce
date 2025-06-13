@@ -54,8 +54,8 @@ const {
               imageUrl={product.image?.url || "/placeholder.png"}
               tenantSlug={product.tenant?.slug}
               tenantImage={product.tenant?.image?.url}
-              reviewsCount={3}
-              reviewsRating={4.5}
+              reviewsCount={product.reviewCount}
+              reviewsRating={product.reviewRating}
             />
           ))}
       </div>
