@@ -169,6 +169,9 @@ export interface Tenant {
    */
   slug: string;
   image?: (string | null) | Media;
+  /**
+   * Stripe account ID associate with your shop.
+   */
   stripeAccountId: string;
   /**
    * You cannot create products for this tenant until you have submitted your Stripe account details.
@@ -232,6 +235,24 @@ export interface Product {
   tags?: (string | Tag)[] | null;
   images?: (string | null) | Media;
   refundPolicy?: ('no-refund' | '1-day' | '3-day' | '7-day' | '30-day') | null;
+  /**
+   * Protected content only visible to customers after purchase. Add product documentation,downloadable files, getting started guides and bonus materials.
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -255,6 +276,9 @@ export interface Order {
   name: string;
   user: string | User;
   products: string | Product;
+  /**
+   * Stripe checkout session associated with this order.
+   */
   stripeCheckoutSessionId: string;
   updatedAt: string;
   createdAt: string;
@@ -421,6 +445,7 @@ export interface ProductsSelect<T extends boolean = true> {
   tags?: T;
   images?: T;
   refundPolicy?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
 }
